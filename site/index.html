@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="None">
+        
+        
+        <link rel="shortcut icon" href="img/favicon.ico">
+        <title>Seguridad en redes y sistemas</title>
+        <link href="css/bootstrap.min.css" rel="stylesheet">
+        <link href="css/font-awesome.min.css" rel="stylesheet">
+        <link href="css/base.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+        <script>hljs.highlightAll();</script> 
+    </head>
+
+    <body class="homepage">
+        <div class="navbar fixed-top navbar-expand-lg navbar-dark bg-primary">
+            <div class="container">
+                <a class="navbar-brand" href=".">Seguridad en redes y sistemas</a>
+
+                <!-- Expanded navigation -->
+                <div id="navbar-collapse" class="navbar-collapse collapse">
+
+                    <ul class="nav navbar-nav ml-auto">
+                        <li class="nav-item">
+                            <a href="#" class="nav-link" data-toggle="modal" data-target="#mkdocs_search_modal">
+                                <i class="fa fa-search"></i> Search
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="row">
+                    <div class="col-md-3"><div class="navbar-light navbar-expand-md bs-sidebar hidden-print affix" role="complementary">
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggler collapsed" data-toggle="collapse" data-target="#toc-collapse" title="Table of Contents">
+            <span class="fa fa-angle-down"></span>
+        </button>
+    </div>
+
+    
+    <div id="toc-collapse" class="navbar-collapse collapse card bg-secondary">
+        <ul class="nav flex-column">
+            
+            <li class="nav-item" data-level="1"><a href="#reto-2-deteccion-con-suricata-tcpdump-y-tcpreplay" class="nav-link">Reto 2: Detección con Suricata, TCPDump y TCPReplay</a>
+              <ul class="nav flex-column">
+            <li class="nav-item" data-level="2"><a href="#sistema-de-deteccion-de-intrusos-ids" class="nav-link">Sistema de detección de intrusos (IDS)</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#suricata-ids" class="nav-link">Suricata IDS</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#tcpdump-y-tcpreplay" class="nav-link">TCPDump y TCPReplay</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#capturando-y-replicando-trafico" class="nav-link">Capturando y replicando tráfico</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#entrega" class="nav-link">Entrega</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+              </ul>
+            </li>
+        </ul>
+    </div>
+</div></div>
+                    <div class="col-md-9" role="main">
+
+<h1 id="reto-2-deteccion-con-suricata-tcpdump-y-tcpreplay">Reto 2: Detección con Suricata, TCPDump y TCPReplay</h1>
+<h2 id="sistema-de-deteccion-de-intrusos-ids">Sistema de detección de intrusos (IDS)</h2>
+<p>Un IDS (Sistema de Detección de Intrusiones, por sus siglas en inglés) es un tipo de software o hardware diseñado para monitorear y analizar el tráfico de red o los eventos en un sistema informático en busca de actividades maliciosas o comportamientos sospechosos. El objetivo principal de un IDS es detectar intrusiones o intentos de violar la seguridad de un sistema.</p>
+<p>Hay dos tipos principales de IDS:
+*   <strong>IDS de Red (NIDS):</strong> Examina el tráfico en la red y busca patrones o firmas conocidas de ataques. Puede operar en modo promiscuo, donde analiza todo el tráfico que pasa a través de una red, o en modo de enlace, donde se enfoca en analizar el tráfico destinado a una interfaz de red específica.
+*   <strong>IDS de Host (HIDS):</strong> Se instala en sistemas individuales y monitorea la actividad en esos sistemas en busca de comportamientos anómalos o actividades sospechosas. Puede analizar registros del sistema, cambios en archivos, o cualquier actividad que pueda indicar una intrusión.</p>
+<p>Cuando un IDS detecta un comportamiento sospechoso o una posible intrusión, puede generar alertas, registrar la actividad o tomar medidas para bloquear o prevenir la acción maliciosa. Es importante destacar que un IDS no evita por sí mismo intrusiones, sino que actúa como un sistema de alerta temprana para que los administradores de seguridad puedan tomar medidas correctivas.</p>
+<h2 id="suricata-ids">Suricata IDS</h2>
+<p><img alt="Logo Suricata" src="https://suricata.io/wp-content/uploads/2021/01/Logo-FINAL_Vertical_Color_Whitetext.png" /></p>
+<p><a href="https://suricata.io/">Suricata</a> es un Sistema de Detección de Intrusiones basado en Red (NIDS) y Sistema de Prevención de Intrusiones basado en Red (NIPS) de código abierto. Fue desarrollado para proporcionar una solución de seguridad de red avanzada capaz de detectar y prevenir actividades maliciosas en entornos de red. Suricata se basa en la tecnología de procesamiento de información de alto rendimiento y es conocido por su capacidad para analizar el tráfico de red a alta velocidad, no impactando sobre la calidad del servicio.</p>
+<p>Algunas características clave de Suricata son:
+1.  <strong>Motor de Detección Multi-Hilo:</strong> Suricata utiliza un motor de detección multi-hilo que permite un análisis de tráfico más eficiente y rápido, usando varios núcleos del procesador. Puede manejar grandes volúmenes de datos de red en tiempo real.
+2.  <strong>Soporte para Reglas de Firma y Reglas de Comportamiento:</strong> Al igual que otros IDS/IPS (Como Snort), Suricata utiliza reglas para identificar patrones asociados con amenazas conocidas. 
+3.  <strong>Soporte para muchos protocolos:</strong> Suricata es capaz de analizar y detectar amenazas en una variedad de protocolos de red, como TCP, UDP, ICMP, HTTP, DNS, entre otros.
+4.  <strong>Modo de Prevención (IPS):</strong> Además de la detección de intrusiones, Suricata puede operar en modo de prevención para bloquear activamente el tráfico que se identifica como malicioso según las reglas configuradas.
+5.  <strong>Registro Detallado y Salida JSON:</strong> Suricata proporciona registros detallados de eventos (LOGs) y admite la salida de registros en formato JSON, lo que facilita la integración con sistemas de gestión de eventos e información de seguridad (SIEM).</p>
+<p>Suricata es una opción popular para aquellos que buscan una solución de detección y prevención de intrusiones eficiente y de código abierto. Se utiliza en diversos entornos, desde redes empresariales hasta sistemas de seguridad para servidores web. Además de su función principal como IDS/IPS, Suricata también puede ser utilizado como un potente sensor de red para la monitorización de la actividad de la red.</p>
+<h2 id="tcpdump-y-tcpreplay">TCPDump y TCPReplay</h2>
+<p>TCPDump es una herramienta de línea de comandos en sistemas operativos basados en Unix y Linux que permite capturar y analizar el tráfico de red en tiempo real. Con TCPDump, puedes interceptar y mostrar los paquetes que viajan a través de una interfaz de red específica. Esta herramienta es útil para el análisis de redes, resolución de problemas, y monitoreo del tráfico.</p>
+<p>Al ejecutar TCPDump, puedes especificar filtros para capturar paquetes específicos basándote en direcciones IP, puertos, protocolos, entre otros criterios. Esto facilita la observación y el análisis del tráfico de red en un nivel más detallado. La información capturada por TCPDump puede ser guardada en archivos para su posterior análisis o revisión.</p>
+<p>TCPReplay es una herramienta de software que permite reproducir tráfico de red previamente grabado. Es útil en situaciones donde se desea emular o replicar patrones específicos de tráfico en una red para propósitos de prueba, análisis o depuración.</p>
+<ol>
+<li>Pruebas de rendimiento: Puedes reproducir grabaciones de tráfico real en una red para evaluar el rendimiento de sistemas de red, como firewalls, IDS (Sistemas de Detección de Intrusos), y otros dispositivos de seguridad.</li>
+<li>Desarrollo y depuración: Los desarrolladores pueden utilizar TCPReplay para reproducir tráfico de red y simular situaciones específicas con el fin de depurar y probar sus aplicaciones.</li>
+<li>Entrenamiento y simulación: En entornos de capacitación, TCPReplay se puede utilizar para simular escenarios de red específicos, permitiendo a los profesionales de seguridad y redes practicar y mejorar sus habilidades.</li>
+</ol>
+<p>El funcionamiento básico de TCPReplay implica tomar un archivo de captura de tráfico (por ejemplo, creado con TCPDump), y reproducir ese tráfico a través de una interfaz de red. Puedes ajustar la velocidad de reproducción y otras opciones según tus necesidades.</p>
+<h2 id="capturando-y-replicando-trafico">Capturando y replicando tráfico</h2>
+<p>En la presente sesión, capturaremos tráfico para analizarlo en suricata. Para obtener tráfico malicioso, vamos a generar tráfico proveniente de una auditoría a una máquina. Dado que lo hemos realizado en la UD anterior, vamos a replicar 3 acciones expuestas por el profesor sobre Metasploitable:
+*   La fase de escaner con NMAP
+*   La fase de explotación al CVE-2007-6750 (DOS con Slowloris)
+*   La fase de explotación al CVE-2011-2523 (Shell mediante el exploit en sftpd)</p>
+<p>Encontramos TCPDump instalado en Metasploitable por defecto. Para lanzarlo se usa la siguiente orden:</p>
+<pre><code class="language-bash">tcpdump -i eth0 -w nombre.pcap          #sustituyendo eth0 por tu interfaz 
+</code></pre>
+<p>Una vez está funcionando la captura, realizamos las pruebas. Será adecuado (para reducir el volumen de tráfico) dejar preparada la prueba, lanzar TCPDump, iniciar la prueba y pararla inmediatamente después de acabar esta.</p>
+<p>Acto seguido, debemos preparar la máquina Ubuntu con Suricata. Configuramos el IDS (suricata.yaml) con las IPs que tuviéramos en el laboratorio.
+Para replicar el tráfico, con suricata corriendo, escribimos:</p>
+<pre><code class="language-bash">tcpreplay -i eth0                   #sustituyendo eth0 por tu interfaz
+</code></pre>
+<p>Existen multitud de opciones en estas dos herramientas como, por ejemplo, la reproducción rápida con TCPReplay (ahorrando tiempo). Para descubrirlas, tenemos disponible el manual o la documentación en internet.</p>
+<h2 id="entrega">Entrega</h2>
+<p>Sube a Aules un documento PDF con las alertas encontradas y una interpretación de estas, así como de la regla que las ha hecho saltar.</p></div>
+            </div>
+        </div>
+
+        <footer class="col-md-12">
+            <hr>
+            <p>Documentation built with <a href="https://www.mkdocs.org/">MkDocs</a>.</p>
+        </footer>
+        <script src="js/jquery-3.6.0.min.js"></script>
+        <script src="js/bootstrap.min.js"></script>
+        <script>
+            var base_url = ".",
+                shortcuts = {"help": 191, "next": 78, "previous": 80, "search": 83};
+        </script>
+        <script src="js/base.js"></script>
+        <script src="search/main.js"></script>
+
+        <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="searchModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="searchModalLabel">Search</h4>
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            </div>
+            <div class="modal-body">
+                <p>From here you can search these documents. Enter your search terms below.</p>
+                <form>
+                    <div class="form-group">
+                        <input type="search" class="form-control" placeholder="Search..." id="mkdocs-search-query" title="Type search term here">
+                    </div>
+                </form>
+                <div id="mkdocs-search-results" data-no-results-text="No results found"></div>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div><div class="modal" id="mkdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="keyboardModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="keyboardModalLabel">Keyboard Shortcuts</h4>
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            </div>
+            <div class="modal-body">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th style="width: 20%;">Keys</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="help shortcut"><kbd>?</kbd></td>
+                    <td>Open this help</td>
+                  </tr>
+                  <tr>
+                    <td class="next shortcut"><kbd>n</kbd></td>
+                    <td>Next page</td>
+                  </tr>
+                  <tr>
+                    <td class="prev shortcut"><kbd>p</kbd></td>
+                    <td>Previous page</td>
+                  </tr>
+                  <tr>
+                    <td class="search shortcut"><kbd>s</kbd></td>
+                    <td>Search</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+
+    </body>
+</html>
+
+<!--
+MkDocs version : 1.5.3
+Build Date UTC : 2024-04-02 18:52:35.769089+00:00
+-->
